@@ -7,20 +7,20 @@ function preload() {
 		{name:'major (low)', pitches:[48, 50, 52, 53, 55, 57, 59, 60, 62, 64, 65]},
 		{name:'minor pentatonic', pitches:[48, 51, 53, 55, 58, 60, 63, 65, 67, 70, 72]},
 		{name:'major pentatonic', pitches:[48, 50, 52, 55, 57, 60, 62, 64, 67, 69, 72]},
-		//{name:'whole tone', pitches:[48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68]},
+		{name:'whole tone', pitches:[48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68]},
 		{name:'major triads', pitches:[48, 52, 55, 60, 64, 67, 72, 76, 79, 83, 84]},
-		{name:'randomize!', pitches:[60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77]},
+		//{name:'randomize!', pitches:[60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77]},
 	];
 	
 	majorScale = [60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77];
 	
 	samplePresets = [
 		{name:'vibraphone', filename:'vibraphone'},
-		//{name:'piano', filename:'piano_C3'},
+		{name:'piano', filename:'piano_C3'},
 		{name:'whistle', filename:'whistle'},
 		{name:'splurt', filename:'splurt'},
 		{name:'ooh', filename:'ooh'},
-		//{name:'mouth rhythm', filename:'mouth-rhythm'}, 
+		{name:'mouth rhythm', filename:'mouth-rhythm'}, 
 		{name:'acoustic bass', filename:'acoustic-bass'}, 
 		{name:'kalimba', filename:'kalimba'}, 
 	];
@@ -185,6 +185,7 @@ function createPresetButton(name, index, group, pressFunction) {
 	presetButton.attribute('type', 'radio');
 	presetButton.attribute('name', group);
 	presetButton.attribute('id', name);
+        presetButton.attribute('change',pressFunction.bind(null, index));
 	presetButton.parent(presetButtonContainer);
 	
 	presetButtonLabel = createElement('label');
@@ -639,3 +640,24 @@ function hideHelpBoxes() {
 		  'transition: visibility 0s 0.25s, opacity 0.25s linear;');
 	}
 }
+
+function leftCK() {
+	$(":radio[name='samples']")[($(":radio[name='samples']:checked").index(":radio[name='samples']")+1) % $(":radio[name='samples']").length].checked=true;
+	loadSamplePreset($(":radio[name='samples']:checked").index(":radio[name='samples']"));
+}
+
+function rightCK() {
+	$(":radio[name='key maps']")[($(":radio[name='key maps']:checked").index(":radio[name='key maps']")+1) % $(":radio[name='key maps']").length].checked=true;
+	setKeyPreset($(":radio[name='key maps']:checked").index(":radio[name='key maps']"));
+}
+
+$(window).on('load', function() {
+  $("body").mousedown(function(eventData) {
+      if (eventData.which === 1) {
+          leftCK();
+      }
+      if (eventData.which === 3 ) {
+          rightCK();
+      }
+  });
+});
